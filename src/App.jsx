@@ -9,6 +9,8 @@ import Admin from './pages/Admin';
 import LombaDetail from './pages/LombaDetail';
 import Bookmark from './pages/Bookmark';
 import Kalender from './pages/Kalender';
+import ArtikelPage from './pages/ArtikelPage';
+import ArtikelDetailPage from './pages/ArtikelDetailPage';
 
 // Hanya user biasa (bukan admin lokal)
 function UserRoute({ children }) {
@@ -48,6 +50,8 @@ function AppRoutes() {
       <Route path="/bookmark" element={<UserRoute><Bookmark /></UserRoute>} />
       <Route path="/kalender" element={<UserRoute><Kalender /></UserRoute>} />
       <Route path="/lomba/:id" element={<UserRoute><LombaDetail /></UserRoute>} />
+      <Route path="/artikel" element={<UserRoute><ArtikelPage /></UserRoute>} />      {/* ← tambah */}
+      <Route path="/artikel/:id" element={<UserRoute><ArtikelDetailPage /></UserRoute>} /> {/* ← tambah */}
 
       {/* Halaman admin lokal */}
       <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
