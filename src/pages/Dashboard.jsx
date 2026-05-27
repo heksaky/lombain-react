@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import ilustrasiKanan from '../assets/waita.png';
+import ilustrasiKiri from '../assets/wanita.png';
+import ilustrasiKanan from '../assets/priaa.png';
 
 const kategoriList = [
   { id: 'semua', label: 'Semua' },
@@ -307,23 +308,53 @@ export default function Dashboard() {
         <main style={{ flex: 1, padding: '20px 24px', width: '100%' }}>
 
           {/* Banner */}
-          <div style={{ background: 'linear-gradient(120deg, #2D1B69 60%, #4A2F9E 100%)', borderRadius: 20, padding: '20px 50px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, overflow: 'hidden' }}>
+          <div style={{
+            background: 'linear-gradient(120deg, #2D1B69 60%, #4A2F9E 100%)',
+            borderRadius: 20,
+            padding: '100px 50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 20,
+            overflow: 'hidden',
+            position: 'relative'
+          }}>
+  
             <div style={{ flex: 1 }}>
               <h2 style={{ color: 'white', fontWeight: 900, fontSize: 20, marginBottom: 6 }}>
-                Halo, <span style={{ color: '#F5A623' }}>{user?.name}!</span>
+                 Halo, <span style={{ color: '#F5A623' }}>{user?.name}!</span>
               </h2>
-              <p style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600, fontSize: 16, maxWidth: 500, lineHeight: 1.5 }}>
-                "Setiap hari adalah kesempatan untuk belajar dan menjadi versi terbaik dari dirimu sendiri."
-              </p>
+
+            <p style={{
+              color: 'rgba(255,255,255,0.75)',
+              fontWeight: 600,
+              fontSize: 16,
+              maxWidth: 500,
+              lineHeight: 1.5
+            }}>
+              "Setiap hari adalah kesempatan untuk belajar dan menjadi versi terbaik dari dirimu sendiri."
+             </p>
             </div>
-                    <div className="hidden lg:block absolute right-40 top-20">
-                      <img
-                        src={ilustrasiKanan}
-                        alt="Ilustrasi Wanita"
-                        className="w-80 h-auto object-contain"
-                        />
-                    </div>
+
+          {/* Ilustrasi Wanita */}
+          <div className="hidden lg:block absolute right-75 top-17">
+           <img
+              src={ilustrasiKiri}
+              alt="Ilustrasi Wanita"
+              className="w-40 h-auto object-contain"
+              />
           </div>
+
+           {/* Ilustrasi Pria */}
+           <div className="hidden lg:block absolute right-10 top-1">
+             <img
+             src={ilustrasiKanan}
+              alt="Ilustrasi Tambahan"
+              className="w-65 h-auto object-contain"
+               />
+          </div>
+
+        </div>
 
           {/* Kategori */}
           <p style={{ fontWeight: 800, fontSize: 11, color: '#4A2F9E', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Kategori</p>
