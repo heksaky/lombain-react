@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -12,7 +14,6 @@ import Kalender from './pages/Kalender';
 import ArtikelPage from './pages/ArtikelPage';
 import ArtikelDetailPage from './pages/ArtikelDetailPage';
 
-// Hanya user biasa (bukan admin lokal)
 function UserRoute({ children }) {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
@@ -20,7 +21,6 @@ function UserRoute({ children }) {
   return children;
 }
 
-// Hanya admin lokal (login admin/123)
 function AdminRoute({ children }) {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
@@ -28,7 +28,6 @@ function AdminRoute({ children }) {
   return children;
 }
 
-// Hanya untuk yang belum login
 function GuestRoute({ children }) {
   const { user } = useAuth();
   if (!user) return children;
@@ -44,16 +43,16 @@ function AppRoutes() {
       <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
       <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
 
-      {/* Halaman user biasa */}
-      <Route path="/dashboard" element={<UserRoute><Dashboard /></UserRoute>} />
-      <Route path="/profile" element={<UserRoute><Profile /></UserRoute>} />
-      <Route path="/bookmark" element={<UserRoute><Bookmark /></UserRoute>} />
-      <Route path="/kalender" element={<UserRoute><Kalender /></UserRoute>} />
-      <Route path="/lomba/:id" element={<UserRoute><LombaDetail /></UserRoute>} />
-      <Route path="/artikel" element={<UserRoute><ArtikelPage /></UserRoute>} />      {/* ← tambah */}
-      <Route path="/artikel/:id" element={<UserRoute><ArtikelDetailPage /></UserRoute>} /> {/* ← tambah */}
+      {/* Semua halaman user pakai Layout (sidebar otomatis muncul) */}
+      <Route path="/dashboard"   element={<UserRoute><Layout><Dashboard /></Layout></UserRoute>} />
+      <Route path="/profile"     element={<UserRoute><Layout><Profile /></Layout></UserRoute>} />
+      <Route path="/bookmark"    element={<UserRoute><Layout><Bookmark /></Layout></UserRoute>} />
+      <Route path="/kalender"    element={<UserRoute><Layout><Kalender /></Layout></UserRoute>} />
+      <Route path="/lomba/:id"   element={<UserRoute><Layout><LombaDetail /></Layout></UserRoute>} />
+      <Route path="/artikel"     element={<UserRoute><Layout><ArtikelPage /></Layout></UserRoute>} />
+      <Route path="/artikel/:id" element={<UserRoute><Layout><ArtikelDetailPage /></Layout></UserRoute>} />
 
-      {/* Halaman admin lokal */}
+      {/* Admin punya sidebar sendiri */}
       <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
 
       <Route path="*" element={<Navigate to="/login" replace />} />
@@ -63,10 +62,12 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
