@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import api from '../services/api';
 import ilustrasiKiri from '../assets/wanita.png';
@@ -18,6 +18,7 @@ const kategoriList = [
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isDark } = useTheme();
 
   const [activeKategori, setActiveKategori] = useState('semua');
@@ -45,7 +46,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/lombas', { headers: { 'Accept': 'application/json' } })
-      .then(r => r.json()).then(d => { setLombaData(d.data); setLoading(false); }).catch(() => setLoading(false));
+      .then(r => r.json()).then(d => { setLombaData(d.data || []); setLoading(false); }).catch(() => setLoading(false));
   }, []);
 
   const toggleBookmark = async (e, id) => {
@@ -64,7 +65,8 @@ export default function Dashboard() {
 
   const filtered = lombaData.filter(l => {
     const matchKat = activeKategori === 'semua' || l.kategori === activeKategori;
-    const matchSearch = l.nama.toLowerCase().includes(search.toLowerCase());
+    const q = searchParams.get('q') || '';
+    const matchSearch = l.nama.toLowerCase().includes(q.toLowerCase());
     return matchKat && matchSearch;
   });
 
@@ -87,24 +89,38 @@ export default function Dashboard() {
         {/* Banner */}
         <div style={{
           background: 'linear-gradient(120deg, #2D1B69 60%, #4A2F9E 100%)',
-          borderRadius: 20, padding: '100px 50px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          marginBottom: 20, overflow: 'hidden', position: 'relative',
+          borderRadius: 20,
+          padding: '28px 32px',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: 20,
+          overflow: 'hidden',
+          position: 'relative',
+          minHeight: 160,
         }}>
-          <div style={{ flex: 1 }}>
-            <h2 style={{ color: 'white', fontWeight: 900, fontSize: 20, marginBottom: 6 }}>
+          <div style={{ flex: 1, zIndex: 2 }}>
+            <h2 style={{ color: 'white', fontWeight: 900, fontSize: 22, marginBottom: 8 }}>
               Halo, <span style={{ color: '#F5A623' }}>{user?.name}!</span>
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600, fontSize: 16, maxWidth: 500, lineHeight: 1.5 }}>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600, fontSize: 13, maxWidth: 380, lineHeight: 1.6 }}>
               "Setiap hari adalah kesempatan untuk belajar dan menjadi versi terbaik dari dirimu sendiri."
             </p>
           </div>
-          <div className="hidden lg:block absolute right-75 top-17">
-            <img src={ilustrasiKiri} alt="Ilustrasi Wanita" className="w-40 h-auto object-contain"/>
-          </div>
-          <div className="hidden lg:block absolute right-10 top-1">
-            <img src={ilustrasiKanan} alt="Ilustrasi Tambahan" className="w-65 h-auto object-contain"/>
-          </div>
+
+          {/* Ilustrasi Wanita */}
+          <img
+            src={ilustrasiKiri}
+            alt="Ilustrasi Wanita"
+            style={{ position: 'absolute', right: 180, bottom: 0, height: 122, width: 'auto', objectFit: 'contain', zIndex: 1 }}
+          />
+
+          {/* Ilustrasi Pria */}
+          <img
+            src={ilustrasiKanan}
+            alt="Ilustrasi Pria"
+            style={{ position: 'absolute', right: 32, bottom: 0, height: 155, width: 'auto', objectFit: 'contain', zIndex: 1 }}
+          />
         </div>
 
         {/* Kategori */}
@@ -124,7 +140,7 @@ export default function Dashboard() {
 
         {/* Lomba list */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <h3 style={{ fontWeight: 900, fontSize: 16, color: T.text }}>🔥 Terbaru</h3>
+          <h3 style={{ fontWeight: 900, fontSize: 16, color: T.text }}> Terbaru</h3>
           <a href="#" style={{ fontWeight: 800, fontSize: 13, color: '#7B5DC8', textDecoration: 'none' }}>Selengkapnya ›</a>
         </div>
 
